@@ -81,13 +81,17 @@ app.get("/feed", (req, res) => {
       const desc = ev.getDesc();
       // eventTime is usually present for time-bound events like candles/havdalah
       const eventTime = ev.eventTime || ev.getDate().greg();
+      const formatOptions = { timeZone: location.getTzid() }; // Force location timezone
 
       if (desc === "Candle lighting") {
         calendar.createEvent({
           start: eventTime,
           end: eventTime,
           summary: `🕯️ Candle Lighting`,
-          description: `Candle Lighting at ${eventTime.toLocaleTimeString()}`,
+          description: `Candle Lighting at ${eventTime.toLocaleTimeString(
+            "en-US",
+            formatOptions
+          )}`,
         });
 
         // Calculate Shkiya
@@ -99,7 +103,10 @@ app.get("/feed", (req, res) => {
             start: sunset,
             end: sunset,
             summary: `☀️ Shkiya`,
-            description: `Sunset (Shkiya) at ${sunset.toLocaleTimeString()}`,
+            description: `Sunset (Shkiya) at ${sunset.toLocaleTimeString(
+              "en-US",
+              formatOptions
+            )}`,
           });
         }
       } else if (desc === "Havdalah") {
@@ -107,7 +114,10 @@ app.get("/feed", (req, res) => {
           start: eventTime,
           end: eventTime,
           summary: `✨ Havdallah`,
-          description: `Havdallah at ${eventTime.toLocaleTimeString()}`,
+          description: `Havdallah at ${eventTime.toLocaleTimeString(
+            "en-US",
+            formatOptions
+          )}`,
         });
       }
     }
