@@ -3,6 +3,7 @@ import { HebrewCalendar, HDate, Location, Zmanim } from "@hebcal/core";
 import ical from "ical-generator";
 import zipcodes from "zipcodes";
 import tzLookup from "tz-lookup";
+import moment from "moment-timezone";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -81,17 +82,20 @@ app.get("/feed", (req, res) => {
       const desc = ev.getDesc();
       // eventTime is usually present for time-bound events like candles/havdalah
       const eventTime = ev.eventTime || ev.getDate().greg();
-      const formatOptions = { timeZone: location.getTzid() }; // Force location timezone
+      const tzid = location.getTzid();
+      const mEventTime = moment(eventTime).tz(tzid);
+      const formatOptions = { timeZone: tzid }; // Force location timezone
 
       if (desc === "Candle lighting") {
         calendar.createEvent({
-          start: eventTime,
-          end: eventTime,
+          start: mEventTime,
+          end: mEventTime,
           summary: `🕯️ Candle Lighting`,
           description: `Candle Lighting at ${eventTime.toLocaleTimeString(
             "en-US",
             formatOptions
           )}`,
+          timezone: tzid,
         });
 
         // Calculate Shkiya
@@ -99,25 +103,28 @@ app.get("/feed", (req, res) => {
         const sunset = zmanim.sunset();
 
         if (sunset) {
+          const mSunset = moment(sunset).tz(tzid);
           calendar.createEvent({
-            start: sunset,
-            end: sunset,
+            start: mSunset,
+            end: mSunset,
             summary: `☀️ Shkiya`,
             description: `Sunset (Shkiya) at ${sunset.toLocaleTimeString(
               "en-US",
               formatOptions
             )}`,
+            timezone: tzid,
           });
         }
       } else if (desc === "Havdalah") {
         calendar.createEvent({
-          start: eventTime,
-          end: eventTime,
+          start: mEventTime,
+          end: mEventTime,
           summary: `✨ Havdallah`,
           description: `Havdallah at ${eventTime.toLocaleTimeString(
             "en-US",
             formatOptions
           )}`,
+          timezone: tzid,
         });
       }
     }
