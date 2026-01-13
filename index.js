@@ -124,6 +124,4 @@ app.get("/feed", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Zmanim feed running on http://localhost:${PORT}`);
-
-  fetch(`http://localhost:${PORT}/feed?zip=10001`);
 });
