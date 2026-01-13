@@ -80,51 +80,58 @@ app.get("/feed", (req, res) => {
 
     for (const ev of events) {
       const desc = ev.getDesc();
-      // eventTime is usually present for time-bound events like candles/havdalah
       const eventTime = ev.eventTime || ev.getDate().greg();
       const tzid = location.getTzid();
-      const mEventTime = moment(eventTime).tz(tzid);
-      const formatOptions = { timeZone: tzid }; // Force location timezone
+
+      // "Wall Clock" Shim:
+      // 1. Get the wall-clock time in the target timezone (e.g. 16:28)
+      // 2. Create a Date object that represents that time in UTC (16:28 Z)
+      // 3. ical-generator (running in UTC) will output "162800" (floating),
+      //    which combined with the Calendar's TZID header, works perfectly.
+      const m = moment(eventTime).tz(tzid);
+      const wallClockStr = m.format("YYYY-MM-DDTHH:mm:ss");
+      const shiftedDate = new Date(wallClockStr + "Z");
+
+      const formatOptions = { timeZone: tzid };
 
       if (desc === "Candle lighting") {
         calendar.createEvent({
-          start: mEventTime,
-          end: mEventTime,
+          start: shiftedDate,
+          end: shiftedDate,
           summary: `🕯️ Candle Lighting`,
           description: `Candle Lighting at ${eventTime.toLocaleTimeString(
             "en-US",
             formatOptions
           )}`,
-          timezone: tzid,
         });
 
-        // Calculate Shkiya
         const zmanim = new Zmanim(location, eventTime, false);
         const sunset = zmanim.sunset();
 
         if (sunset) {
           const mSunset = moment(sunset).tz(tzid);
+          const sunsetStr = mSunset.format("YYYY-MM-DDTHH:mm:ss");
+          const shiftedSunset = new Date(sunsetStr + "Z");
+
           calendar.createEvent({
-            start: mSunset,
-            end: mSunset,
+            start: shiftedSunset,
+            end: shiftedSunset,
             summary: `☀️ Shkiya`,
             description: `Sunset (Shkiya) at ${sunset.toLocaleTimeString(
               "en-US",
               formatOptions
             )}`,
-            timezone: tzid,
           });
         }
       } else if (desc === "Havdalah") {
         calendar.createEvent({
-          start: mEventTime,
-          end: mEventTime,
+          start: shiftedDate,
+          end: shiftedDate,
           summary: `✨ Havdallah`,
           description: `Havdallah at ${eventTime.toLocaleTimeString(
             "en-US",
             formatOptions
           )}`,
-          timezone: tzid,
         });
       }
     }
