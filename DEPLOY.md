@@ -3,6 +3,7 @@
 Since this is a standard Node.js application, the easiest way to host it for free is using **Render** or **Railway**.
 
 ## Option 1: Render.com (Recommended - Free Tier)
+
 1.  **Push your code to GitHub**
     - Create a new repository on [GitHub.com](https://github.com/new).
     - Run these commands in your `zmanim feed` folder:
@@ -19,12 +20,13 @@ Since this is a standard Node.js application, the easiest way to host it for fre
     - Click **"New +"** -> **"Web Service"**.
     - Connect your GitHub account and select your new repository.
     - **Settings**:
-        - **Runtime**: Node
-        - **Build Command**: `npm install`
-        - **Start Command**: `npm start`
+      - **Runtime**: Node
+      - **Build Command**: `npm install && npm run build`
+      - **Start Command**: `npm start`
     - Click **"Create Web Service"**.
 
 ## Option 2: Railway (Easiest to setup, small trial)
+
 1.  Go to [Railway.app](https://railway.app).
 2.  Click "Start a New Project".
 3.  Choose "Deploy from GitHub repo".
@@ -32,6 +34,7 @@ Since this is a standard Node.js application, the easiest way to host it for fre
 5.  Railway will auto-detect everything and give you a URL.
 
 ## After Deployment
+
 You will get a URL like:
 `https://zmanim-feed.onrender.com`
 
