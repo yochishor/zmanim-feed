@@ -26,7 +26,7 @@ app.get("/feed", (req, res) => {
         z.longitude,
         false,
         timeZoneId,
-        `${z.city}, ${z.state}, ${z.country}`
+        `${z.city}, ${z.state}, ${z.country}`,
       );
     } else if (lat && lng) {
       const latitude = parseFloat(lat);
@@ -40,7 +40,7 @@ app.get("/feed", (req, res) => {
         longitude,
         isIsrael,
         timeZoneId,
-        "Custom Location"
+        "Custom Location",
       );
     } else {
       return res
@@ -64,7 +64,7 @@ app.get("/feed", (req, res) => {
       end: end,
       location: location,
       candlelighting: true,
-      sedrot: false,
+      sedrot: true,
       omer: false,
       isHebrewYear: false,
       shabbatMevarchim: false,
@@ -101,7 +101,7 @@ app.get("/feed", (req, res) => {
           summary: `🕯️ Candle Lighting`,
           description: `Candle Lighting at ${eventTime.toLocaleTimeString(
             "en-US",
-            formatOptions
+            formatOptions,
           )}`,
         });
 
@@ -119,7 +119,7 @@ app.get("/feed", (req, res) => {
             summary: `☀️ Shkiya`,
             description: `Sunset (Shkiya) at ${sunset.toLocaleTimeString(
               "en-US",
-              formatOptions
+              formatOptions,
             )}`,
           });
         }
@@ -130,8 +130,15 @@ app.get("/feed", (req, res) => {
           summary: `✨ Havdallah`,
           description: `Havdallah at ${eventTime.toLocaleTimeString(
             "en-US",
-            formatOptions
+            formatOptions,
           )}`,
+        });
+      } else if (desc.startsWith("Parashat ")) {
+        calendar.createEvent({
+          start: eventTime,
+          allDay: true,
+          summary: desc,
+          description: ``,
         });
       }
     }
