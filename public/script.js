@@ -31,6 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const generateFeed = (params) => {
+    const havdallah = document.getElementById("havdallah").value;
+    if (havdallah) {
+      params.append("havdallah", havdallah);
+    }
+
     const baseUrl = window.location.origin + "/feed";
     const fullUrl = `${baseUrl}?${params.toString()}`;
 

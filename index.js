@@ -72,6 +72,8 @@ app.get("/feed", (req, res) => {
     end.setFullYear(end.getFullYear() + 1);
 
     // 3. Generate Events
+    const havdalahMins = parseInt(req.query.havdallah, 10) || 50;
+
     /**
      * @type {import('@hebcal/core').CalOptions}
      */
@@ -80,6 +82,7 @@ app.get("/feed", (req, res) => {
       end: end,
       location: location,
       candlelighting: true,
+      havdalahMins: havdalahMins,
       sedrot: true,
       omer: false,
       isHebrewYear: false,
