@@ -90,6 +90,12 @@ p {
   animation: fadeIn 0.3s ease-in-out;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .panel.active {
+    animation: none;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -121,7 +127,7 @@ input {
   transition: border-color 0.2s;
 }
 
-input:focus {
+input:focus-visible {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -137,6 +143,7 @@ small {
 button {
   cursor: pointer;
   font-family: inherit;
+  touch-action: manipulation;
 }
 
 .primary-btn {

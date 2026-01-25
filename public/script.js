@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    locateBtn.textContent = "Locating...";
+    locateBtn.textContent = "Locating…";
     locateBtn.disabled = true;
 
     navigator.geolocation.getCurrentPosition(
