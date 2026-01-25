@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Copy, Download, MapPin, Calendar } from "lucide-react";
+import { Copy, Download, MapPin, Calendar, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,8 +8,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +25,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [resultUrl, setResultUrl] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [zip, setZip] = useState("");
   const [havdallah, setHavdallah] = useState("50");
   const [activeTab, setActiveTab] = useState("location");
@@ -31,6 +39,7 @@ function App() {
     const baseUrl = window.location.origin + "/feed";
     const fullUrl = `${baseUrl}?${params.toString()}`;
     setResultUrl(fullUrl);
+    setDialogOpen(true);
     setLoading(false);
   };
 
@@ -192,57 +201,71 @@ function App() {
               )}
             </CardContent>
           </Card>
-
-          {resultUrl && (
-            <Card className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <CardHeader>
-                <CardTitle>Your Feed URL</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex space-x-2">
-                  <Input
-                    value={resultUrl}
-                    readOnly
-                    aria-label="Generated feed URL"
-                  />
-                  <Button
-                    variant="outline"
-                    onClick={copyToClipboard}
-                    className="w-24"
-                  >
-                    {copyFeedback === "Copied!" ? (
-                      copyFeedback
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4 mr-2" aria-hidden="true" />{" "}
-                        Copy
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between space-x-2">
-                <Button asChild className="flex-1" variant="default">
-                  <a href={webcalUrl}>
-                    <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />{" "}
-                    Subscribe
-                  </a>
-                </Button>
-                <Button asChild className="flex-1" variant="secondary">
-                  <a href={resultUrl} download="zmanim.ics">
-                    <Download className="w-4 h-4 mr-2" aria-hidden="true" />{" "}
-                    Download .ics
-                  </a>
-                </Button>
-              </CardFooter>
-            </Card>
-          )}
         </main>
 
         <footer className="text-center text-sm text-muted-foreground pb-8">
           <p>Times provided by Hebcal.</p>
         </footer>
       </div>
+
+      {/* Success Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle
+                className="h-6 w-6 text-green-600"
+                aria-hidden="true"
+              />
+            </div>
+            <DialogTitle className="text-center">
+              Your Feed is Ready!
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Subscribe to your personalized Zmanim calendar feed.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="flex space-x-2">
+              <Input
+                value={resultUrl}
+                readOnly
+                aria-label="Generated feed URL"
+                className="text-xs"
+              />
+              <Button
+                variant="outline"
+                onClick={copyToClipboard}
+                className="shrink-0"
+              >
+                {copyFeedback === "Copied!" ? (
+                  copyFeedback
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 mr-2" aria-hidden="true" /> Copy
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+
+          <DialogFooter className="flex-col gap-2 sm:flex-col">
+            <Button asChild className="w-full" variant="default">
+              <a href={webcalUrl}>
+                <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />{" "}
+                Subscribe to Calendar
+              </a>
+            </Button>
+            <Button asChild className="w-full" variant="secondary">
+              <a href={resultUrl} download="zmanim.ics">
+                <Download className="w-4 h-4 mr-2" aria-hidden="true" />{" "}
+                Download .ics File
+              </a>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
