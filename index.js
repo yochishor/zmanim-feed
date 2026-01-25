@@ -8,6 +8,8 @@ import moment from "moment-timezone";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static("public"));
+
 app.get("/feed", (req, res) => {
   try {
     const { zip, lat, lng, tzid } = req.query;

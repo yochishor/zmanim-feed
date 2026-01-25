@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zmanim Feed Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Zmanim Feed Generator</h1>
+        <p>Generate a custom calendar feed for Jewish Zmanim.</p>
+      </header>
+
+      <main>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="zip">Zip Code</button>
+          <button class="tab-btn" data-tab="geo">Coordinates</button>
+        </div>
+
+        <div id="zip-panel" class="panel active">
+          <div class="form-group">
+            <label for="zipcode">Zip Code</label>
+            <input type="text" id="zipcode" placeholder="e.g. 10001" />
+          </div>
+        </div>
+
+        <div id="geo-panel" class="panel">
+          <div class="form-group">
+            <label for="latitude">Latitude</label>
+            <input type="text" id="latitude" placeholder="e.g. 40.7128" />
+          </div>
+          <div class="form-group">
+            <label for="longitude">Longitude</label>
+            <input type="text" id="longitude" placeholder="e.g. -74.0060" />
+          </div>
+          <div class="form-group">
+            <label for="tzid">Timezone ID (Optional)</label>
+            <input type="text" id="tzid" placeholder="e.g. America/New_York" />
+            <small>Leave blank to auto-detect based on coordinates.</small>
+          </div>
+          <button id="locate-btn" class="secondary-btn">📍 Locate Me</button>
+        </div>
+
+        <button id="generate-btn" class="primary-btn">
+          Generate Feed Link
+        </button>
+
+        <div id="result" class="hidden">
+          <div class="result-box">
+            <h3>Your Feed URL:</h3>
+            <div class="url-container">
+              <input type="text" id="feed-url" readonly />
+              <button id="copy-btn">Copy</button>
+            </div>
+            <div class="actions">
+              <a href="#" id="webcal-link" class="action-btn"
+                >Subscribe (WebCal)</a
+              >
+              <a href="#" id="download-link" class="action-btn"
+                >Download .ics</a
+              >
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>Times provided by Hebcal. Created by Zmanim Feed.</p>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
