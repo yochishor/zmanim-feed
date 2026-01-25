@@ -4,9 +4,23 @@ import ical from "ical-generator";
 import zipcodes from "zipcodes";
 import tzLookup from "tz-lookup";
 import moment from "moment-timezone";
+import helmet from "helmet";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Security Middleware
+app.use(helmet());
+app.use(cors());
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
 
 app.use(express.static("public"));
 
