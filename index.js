@@ -22,7 +22,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use(express.static("public"));
+app.use(express.static("client/dist"));
 
 app.get("/feed", (req, res) => {
   try {
